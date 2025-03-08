@@ -18,7 +18,7 @@
 ## Installation & Usage
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/SportManager.git
+   git clone https://github.com/AdrianLargoGit/SportManager.git
 
 ## License
 This project is licensed under the GNU General Public License (GPL).
