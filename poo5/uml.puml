@@ -1,0 +1,294 @@
+@startuml
+class User {
+    - String username
+    - String password
+    + void usernameValidate(String) throws ModelException
+    + boolean equals(Object)
+    + int hashCode()
+}
+
+class Player {
+    - String name
+    - String surname
+    - String dni
+    - ArrayList<Stat> stats
+    - Admin creator
+    + Player(String,String,String,String,String,Admin) throws ModelException
+    - void dniValidation(String) throws ModelException
+    - ArrayList<Stat> initialStats()
+    + void showStatsJson()
+    + void showStatsCsv()
+    + boolean updateStat(String,value)
+    + ArrayList<Stat> getStats()
+    + String toString()
+}
+
+class Admin {
+    + Admin(String ,String) throws ModelException
+}
+
+enum Categories {
+    +String getCategory(String category)
+    +String[] getCategories()
+}
+
+class Stat {
+    - Categories category
+    - double value
+    + Stat(String)
+    + String getCategory()
+    + void setCategory(String)
+    + double getValue()
+    + void setValue(double)
+    + String toString()
+}
+
+class Team {
+    - String name
+    - ArrayList<Player> players
+    - ArrayList<Stat> stats
+    - Admin creator
+    + Team(String,Admin) throws ModelException
+    - ArrayList<Stat> initialStats()
+    + void updateStats()
+    + String getName()
+    + boolean addPlayer(Player)
+    + boolean removePlayer(String)
+    + boolean equals(Object)
+    + int hashCode()
+}
+
+class Matchmaking {
+    - ArrayList<Participant> participants
+    + Matchmaking(Participant, Participant )
+    + boolean isMatchmaked(Participant)
+}
+
+class Tournament {
+    - String name
+    - Date startDate
+    - Date endDate
+    - String league
+    - String sport
+    - Categories categoryRank
+    - ArrayList<Participant> participants
+    - MatchmakingController matchmaking
+    + Tournament(String , Date, Date , String , String , String) throws ModelException
+    + boolean addParticipant(Participant)
+    + boolean removeParticipant(Participant)
+    + ArrayList<Participant> getRandomizedParticipants()
+    + ArrayList<Participant> getParticipantsRanked()
+    + ArrayList<Participant> getParticipants()
+    + MatchmakingController getMatchmaking()
+}
+
+class CommandController {
+    - final Scanner sc
+    + void inicialitation()
+    + void initialUsers() throws ModelException
+    + void start()
+    + void menu()
+    + void menuAdmin(Authentication)
+    + void menuPlayer(Authentication )
+    + void reviewArguments(String[], int)
+}
+
+class AdminsController {
+    - AdminsController uniqueInstance
+    - ArrayList<Admin> admins
+    - AdminsController()
+    + Admin getAdmin(String)
+    + AdminsController getInstance()
+    + void addAdmin(Admin)
+}
+
+class PlayersController {
+    - PlayersController uniqueInstance
+    - ArrayList<Player> players
+    - PlayersController()
+    + PlayersController getInstance()
+    + Player getPlayer(String)
+    + void createPlayer(String, String, String, String, String, Admin) throws ModelException
+    + void deletePlayer(String)
+    + void addPoints(String, String, double)
+    + void statisticsShow(String)
+}
+
+class Authentication {
+    - Authentication uniqueInstance
+    - User currentUser
+    - UserType userType
+    - Authentication()
+    + Authentication getInstance()
+    + void logIn(String , String)
+    + void logOut()
+    + boolean isLoggedIn()
+    + String getUserType()
+    + User getCurrentUser()
+
+    enum UserType {
+        ADMIN, PLAYER
+
+}
+
+class TournamentsController {
+    - TournamentsController uniqueInstance
+    - ArrayList<Tournament> tournaments
+    - TournamentsController()
+    + TournamentsController getInstance()
+    + void deleteTournament(String)
+    + void deletePastTournaments()
+    + void isParticipant(Participant)
+    + void listTournaments(String type)
+    + void createTournament(String, String, String, String, String , String) throws ModelException
+    + void tournamentMatchmakingM(String , String , String)
+    + void tournamentMatchmakingA(String)
+    + void tournamentAdd(String, String)
+    + void tournamentRemove(String, String)
+}
+
+class TeamsController {
+    - TeamsController uniqueInstance
+    - ArrayList<Team> teams
+    - TeamsController()
+    + TeamsController getInstance()
+    + void createTeam(String, Admin) throws ModelException
+    + void deleteTeam(String)
+    + void isInTeam(String)
+    + void teamAdd(String, String)
+    + void teamRemove(String, String)
+}
+
+class MatchmakingController {
+    - ArrayList<Matchmaking> matchmaking
+    + MatchmakingController()
+    + void createMatchmake(Participant, Participant)
+    + void randomMatchmake(ArrayList<Participant>)
+    + void isMatchmaked(Participant)
+    + void removeMatchmaking(Participant)
+}
+
+class PlayerView {
+    + void tournament_add(boolean, boolean, boolean, boolean, boolean)
+    + void tournament_remove(boolean, boolean, boolean, boolean)
+    + void statistics_showJson(ArrayList<Stat>)
+    + void statistics_showCSV(ArrayList<Stat>)
+}
+
+class PublicView {
+    + void welcome(boolean)
+    + void menu()
+    + void login(Authentication.UserType, String)
+    + void logout(Authentication.UserType)
+    + void tournamentList(HashMap<Tournament, ArrayList<Participant>>)
+    + void otherErrors(String)
+}
+
+class DataController{
+    +void inicialitation()
+    +boolean getData()
+    +void saveData()
+    +void close()
+}
+
+class AdminView {
+    + void player_create(boolean)
+    + void player_delete(boolean, boolean, boolean)
+    + void add_points(boolean)
+    + void team_create(boolean)
+    + void team_delete(boolean, boolean)
+    + void team_add(boolean, boolean, boolean)
+    + void team_remove(boolean, boolean, boolean)
+    + void tournament_create(boolean, boolean, boolean)
+    + void tournament_delete(boolean)
+    + void tournament_matchmakingM(boolean, boolean, boolean)
+    + void tournament_matchmakingA(boolean, boolean)
+    + void listMatchmaking(ArrayList<Matchmaking>)
+}
+
+interface Participant {
+        + String getName()
+        + Stat getStat(String category)
+    }
+
+Exception ModelException{
+        + ModelException(String message)
+    }
+
+class Validations {
+        + isMinimum(String, String, int) throws ModelException
+        + isNotNull(String, String) throws ModelException
+        + isMaximum(String, String, int) throws ModelException
+        + isString(String, String) throws ModelException
+    }
+
+class Date {
+        - int year
+        - int month
+        - int day
+        + Date(int , int , int)
+        + Date(String)
+        + Date()
+        + boolean greaterThan(Date)
+        + boolean lowerThan(Date)
+        + boolean isCorrect(String)
+        + String toString()
+    }
+
+App --> CommandController
+CommandController ---> TournamentsController
+CommandController ---> TeamsController
+CommandController ---> PlayersController
+CommandController ---> AdminsController
+CommandController -----> DataController
+PublicView <- CommandController
+CommandController ..> Authentication
+Authentication <. AdminsController
+Authentication <. PlayersController
+Authentication <... TeamsController
+Authentication <... TournamentsController
+TeamsController <.> PlayersController
+AdminView <---- TeamsController
+PlayersController <.> AdminsController
+AdminView <---- PlayersController
+AdminView <---- MatchmakingController
+PlayerView <---- PlayersController
+PublicView <---- PlayersController
+PublicView ..> Authentication
+TournamentsController <.> TeamsController
+PublicView <---- TournamentsController
+AdminView <---- TournamentsController
+PlayerView <---- TournamentsController
+TournamentsController *-- Tournament
+Tournament o-- MatchmakingController
+MatchmakingController *-- Matchmaking
+AdminsController *-- Admin
+PlayersController *-- Player
+Player o-- Stat
+Stat o-- Categories
+TeamsController *-- Team
+Team o- Player
+Tournament o- Participant
+Date -o Tournament
+Tournament o-- Categories
+Team ..|> Participant
+Player ..|> Participant
+Player --|> User
+Admin --|> User
+Participant ---* Matchmaking
+Player ..> Validations
+Admin ..> Validations
+Team ..> Validations
+Tournament ..> Validations
+Validations .> ModelException
+PlayersController <-- DataController
+AdminsController <-- DataController
+TeamsController <-- DataController
+TournamentsController <-- DataController
+DataController -> Player
+Team <- DataController
+DataController -> Admin
+Tournament <- DataController
+DataController --> Stat
+
+@enduml
