@@ -15,8 +15,8 @@
 - **Hibernate** (ORM for database interaction)
 - **IntelliJ IDEA** (IDE for development)
 
-## Installation & Usage
-1. Clone the repository:
+## Get it
+- Clone the repository:
    ```bash
    git clone https://github.com/AdrianLargoGit/SportManager.git
 
